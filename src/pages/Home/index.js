@@ -5,7 +5,18 @@ import { useState } from 'react';
 
 function App() {
 
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([
+        {
+            username:"guilherme", 
+            imageUrl:"//www.gstatic.com/mobilesdk/171005_mobilesdk/discovery-cards-crashlytics.png" ,
+            caption:" Wowo first =)",
+        },
+        {
+            username: "guilherme",
+            imageUrl: "//www.gstatic.com/mobilesdk/171005_mobilesdk/discovery-cards-crashlytics.png",
+            caption: " Wowo first =)",
+        },
+    ]);
     
     return (
         <div className="App">
@@ -17,24 +28,19 @@ function App() {
             </div>
 
             <h1>Insta-Clone</h1>
-
-            <Post
-                username="guilherme" 
-                imageUrl="//www.gstatic.com/mobilesdk/171005_mobilesdk/discovery-cards-crashlytics.png" 
-                caption=" Wowo first =)"
-            />
+            {
+                posts.map( (post, value) => {
+                    return(
+                        <Post
+                            username={post.username}
+                            imageUrl={post.imageUrl}
+                            caption={post.caption}
+                        />
+                    )
+                }) 
+            }
+         
             
-            <Post
-                username="guilherme"
-                imageUrl="//www.gstatic.com/mobilesdk/171005_mobilesdk/discovery-cards-crashlytics.png"
-                caption=" Wowo first =)"
-            />
-
-            <Post
-                username="guilherme"
-                imageUrl="//www.gstatic.com/mobilesdk/171005_mobilesdk/discovery-cards-crashlytics.png"
-                caption=" Wowo first =)"
-            />
 
             {/* Header */}
 
