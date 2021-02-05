@@ -5,7 +5,7 @@ import { db, auth } from '../../services/firebase'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, TextField } from '@material-ui/core';
-
+import ImageUpload from '../../services/imageUpload'
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
@@ -81,9 +81,25 @@ function App() {
             })
             .catch((error) => alert(error.message));
     }
+    const signIn = async (event) => {
+        event.preventDefault();
+
+        auth
+        .signInWithEmailAndPassword(email,password)
+        .catch( (error) => { alert(error.message); return false} )
+        
+        setOpenSignIn(false)
+    }
 
     return (
         <div className="App">
+
+            {/* Caption Iput */}
+            {/* File picker */}
+            {/* post button */}
+
+            
+            <ImageUpload/>
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -130,6 +146,42 @@ function App() {
                     </form>
                 </div>
             </Modal>
+            <Modal
+                open={openSignIn}
+                onClose={() => setOpenSignIn(false)}
+            >
+                <div style={modalStyle} className={classes.paper}>
+                    <form className="app__signup">
+                        <center className="modal__form">
+
+                            <TextField
+                                label="E-mail"
+                                type="text"
+                                value={email}
+                                onChange={e => { setEmail(e.target.value) }}
+                                variant="outlined"
+                                className={classes.p10}
+                            />
+
+                            <TextField
+                                label="Senha"
+                                type="password"
+                                value={password}
+                                onChange={e => { setPassword(e.target.value) }}
+                                variant="outlined"
+                                className={classes.p10}
+                            />
+
+                            <Button variant="contained" color="primary" onClick={signIn}
+                                className={classes.p10}
+                                type="submitt"
+                            >
+                                Login
+                        </Button>
+                        </center>
+                    </form>
+                </div>
+            </Modal>
             <div className="app__header">
 
                 <img
@@ -139,7 +191,7 @@ function App() {
                     user ? <Button onClick={() => auth.signOut()}>Logout</Button>
                         :
                         <div className="app__loginContainer">
-                            <Button onClick={() => setOpen(true)}>Login</Button>
+                            <Button onClick={() => setOpenSignIn(true)}>Login</Button>
                             <Button onClick={() => setOpen(true)}>Registrar</Button>
                         </div> 
                       
