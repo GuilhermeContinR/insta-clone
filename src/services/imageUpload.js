@@ -58,6 +58,17 @@ function ImageUpload(){
             },
             (error) => {
                 console.log(error);
+            },
+            () => {
+                storage
+                .ref("images")
+                .child(image.name)
+                .getDownloadURL()
+                .then( url => {
+                    db.collection("post").add({
+                        
+                    })
+                })
             }
         )
     }
