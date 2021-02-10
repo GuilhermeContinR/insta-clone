@@ -5,7 +5,9 @@ import { db, auth } from '../../services/firebase'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, TextField } from '@material-ui/core';
-import ImageUpload from '../../services/imageUpload'
+import ImageUpload from '../../services/imageUpload';
+import InstagramEmbed from 'react-instagram-embed';
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
@@ -45,7 +47,7 @@ function App() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-       const unsubscribe = auth.onAuthStateChanged((authUser) => {
+        const unsubscribe = auth.onAuthStateChanged((authUser) => {
             if (authUser) {
                 // logado
                 setUser(authUser);
@@ -54,14 +56,14 @@ function App() {
                 setUser(null)
             }
         })
-        return  () => {
+        return () => {
             unsubscribe();
         }
     }, [user, username]);
 
 
     useEffect(() => {
-        db.collection('post').onSnapshot(snapshot => {
+        db.collection('post').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
 
             setPosts(snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -74,9 +76,9 @@ function App() {
     const signUp = async (event) => {
         event.preventDefault();
         auth.createUserWithEmailAndPassword(email, password)
-            .then( (authUser) => {
-               return authUser.user.updateProfile({
-                    displayName:username
+            .then((authUser) => {
+                return authUser.user.updateProfile({
+                    displayName: username
                 })
             })
             .catch((error) => alert(error.message));
@@ -85,9 +87,9 @@ function App() {
         event.preventDefault();
 
         auth
-        .signInWithEmailAndPassword(email,password)
-        .catch( (error) => { alert(error.message); return false} )
-        
+            .signInWithEmailAndPassword(email, password)
+            .catch((error) => { alert(error.message); return false })
+
         setOpenSignIn(false)
     }
 
@@ -98,8 +100,8 @@ function App() {
             {/* File picker */}
             {/* post button */}
 
-            
-            <ImageUpload/>
+
+
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -193,24 +195,47 @@ function App() {
                         <div className="app__loginContainer">
                             <Button onClick={() => setOpenSignIn(true)}>Login</Button>
                             <Button onClick={() => setOpen(true)}>Registrar</Button>
-                        </div> 
-                      
+                        </div>
+
                 }
-               
+
 
             </div>
 
             <h1>Insta-Clone</h1>
-            {
-                posts.map(({ id, post }) => (
-                    <Post key={id} username={post.username} imageUrl={post.imageUrl} caption={post.caption} />
-                ))
+            <div className="app__posts">
+                <div className="app_postsLeft">
+                    {
+                        posts.map(({ id, post }) => (
+                            <Post key={id} username={post.username} imageUrl={post.imageUrl} caption={post.caption} />
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div className="app_postsRight">
+                <InstagramEmbed
+                    url='https://www.instagram.com/p/B_uf9dmAGPw/'
+                    maxWidth={320}
+                    hideCaption={false}
+                    containerTagName='div'
+                    protocol=''
+                    injectScript
+                    onLoading={() => { }}
+                    onSuccess={() => { }}
+                    onAfterRender={() => { }}
+                    onFailure={() => { }}
+                />
+            </div>
+
+
+
+            {user?.displayName ? (
+                <ImageUpload username={user.displayName} />
+            )
+                :
+                (<h3>Faca login para upload</h3>)
             }
-
-            {/* Header */}
-
-            {/* Posts */}
-            {/* Posts */}
         </div>
     );
 }

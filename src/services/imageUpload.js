@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { storage, db } from './firebase'
 import Modal from '@material-ui/core/Modal';
 import { Button, TextField } from '@material-ui/core';
-
+import './imageUpload.css';
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
@@ -17,28 +17,19 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
 }));
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
+// 2:44:52
 
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
-
-
-function ImageUpload(){
+function ImageUpload({username}){
 
     const classes = useStyles();
 
+    const [image, setImage] = useState([]);
     const [caption, setCaption] = useState('');
-    const [image, setImage] = useState();
     const [progress, setProgress] = useState(0);
 
 
     const handleChange = async (e) =>{
+        console.log(e.target.files[0]);
         if(e.target.files[0]){
             setImage(e.target.files[0]);
         }
@@ -66,15 +57,25 @@ function ImageUpload(){
                 .getDownloadURL()
                 .then( url => {
                     db.collection("post").add({
-                        
-                    })
-                })
+                        // firebase.firestore.fieldValue.serverTimeStamp()
+                        timestamp: Math.floor(Date.now() / 1000) ,
+                       caption:caption,
+                       imageUrl: url,
+                       username:username,
+                    });
+
+                    setProgress(0);
+                    setCaption("");
+                    setImage(null);
+
+                });
             }
         )
     }
 
     return(
-        <div>
+        <div className="imageUpload">
+            <progress className="progress" value={progress} max="100" />
             <TextField
                 label="Caption"
                 type="text"
@@ -86,13 +87,12 @@ function ImageUpload(){
             />
             <input
                 type="file"
-                value={image}
                 onChange={handleChange}
                 className={classes.p10}
             />
             <Button variant="contained" color="primary" onClick={handleUpload}
                 className={classes.p10}
-                type="submitt"
+               
             >
                 Upload
             </Button>
