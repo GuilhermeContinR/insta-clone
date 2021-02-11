@@ -3,6 +3,7 @@
     max-width: 500px;
     border: 1px solid lightgray;
     margin-bottom: 45px;
+
 }
 
 .post__image {
@@ -26,4 +27,27 @@
 
 .post__avatar {
     margin-right: 10px;
+}
+
+.post__commentBox{
+    display: flex;
+    margin-top: 10px;
+}
+.post__input{
+    flex:1;
+    border:none;
+    padding:10px;
+    border-top: 1px solid lightgray;
+}
+.post__utton{
+    flex:0;
+    border-top: 1px solid lightgray;
+    color:#6082a3;
+}
+
+.post__comments {
+    padding:20px;
+}
+.post__bottom{
+    margin-bottom:15px;
 }

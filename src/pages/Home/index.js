@@ -64,7 +64,7 @@ function App() {
 
     useEffect(() => {
         db.collection('post').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-
+           
             setPosts(snapshot.docs.map(doc => ({
                 id: doc.id,
                 post: doc.data()
@@ -202,12 +202,11 @@ function App() {
 
             </div>
 
-            <h1>Insta-Clone</h1>
             <div className="app__posts">
                 <div className="app_postsLeft">
                     {
                         posts.map(({ id, post }) => (
-                            <Post key={id} username={post.username} imageUrl={post.imageUrl} caption={post.caption} />
+                            <Post key={id} postId={id} user={user} username={post.username} imageUrl={post.imageUrl} caption={post.caption} />
                         ))
                     }
                 </div>

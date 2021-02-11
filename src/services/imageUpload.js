@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { storage, db } from './firebase'
-import Modal from '@material-ui/core/Modal';
+// import Modal from '@material-ui/core/Modal';
 import { Button, TextField } from '@material-ui/core';
 import './imageUpload.css';
 const useStyles = makeStyles((theme) => ({
